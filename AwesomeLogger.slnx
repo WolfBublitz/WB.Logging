@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/examples/" />
+  <Folder Name="/examples/Simple/" />
+  <Folder Name="/examples/Simple/src/">
+    <Project Path="examples/Simple/src/Simple.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/AwesomeLogger.csproj" />
+  </Folder>
+</Solution>

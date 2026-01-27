@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="R3" Version="1.3.0" />
+    <PackageVersion Include="WB.CodeAnalyzer" Version="1.0.0" />
+  </ItemGroup>
+</Project>
