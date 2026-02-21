@@ -16,9 +16,11 @@ jobs:
         dotnet-version: '10.0.x'
     
     - name: Restore dependencies
+      working-directory: src
       run: dotnet restore
     
     - name: Build
+      working-directory: src
       run: dotnet build --no-restore --configuration Release
 
   test:
@@ -34,7 +36,9 @@ jobs:
         dotnet-version: '10.0.x'
     
     - name: Restore dependencies
+      working-directory: src
       run: dotnet restore
     
     - name: Test
+      working-directory: src
       run: dotnet run --no-restore --configuration Release
