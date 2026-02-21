@@ -44,11 +44,11 @@ jobs:
     
     - name: Test
       working-directory: tests/${{ matrix.test }}/src
-      run: dotnet test --no-restore --configuration Release --logger "trx;LogFileName=../../test-results-${{ matrix.test }}.trx"
+      run: dotnet test --no-restore --configuration Release --report-trx
     
-    - name: Publish test results
-      if: always()
-      uses: actions/upload-artifact@v4
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: (!cancelled())
       with:
-        name: test-results-${{ matrix.test }}
-        path: test-results-${{ matrix.test }}.trx
+        files: |
+          tests/${{ matrix.test }}/src/**/*.trx
