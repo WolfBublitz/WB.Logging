@@ -37,4 +37,4 @@ jobs:
       run: dotnet restore
     
     - name: Test
-      run: dotnet test --no-restore --configuration Release --verbosity normal
+      run: dotnet run --no-restore --configuration Release
