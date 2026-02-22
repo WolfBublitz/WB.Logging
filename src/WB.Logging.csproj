@@ -1,16 +1,67 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- Target Framework -->
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <!-- Package Info -->
+  <PropertyGroup>
+    <Authors>Wolf Bublitz</Authors>
+    <Description>A simple logging library for .NET.</Description>
+    <PackageTags>logger, logging, .NET</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/WolfBublitz/WB.Logging</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WolfBublitz/WB.Logging</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Version>1.0.0-preview.1</Version>
+  </PropertyGroup>
+
+  <!-- Build Options -->
+  <PropertyGroup>
+    <!-- Build settings --> 
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild> 
+    <Deterministic>true</Deterministic>
     <InvariantGlobalization>true</InvariantGlobalization>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <!-- Analyzers -->
+  <PropertyGroup>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+  </PropertyGroup>
+
+  <!-- Documentation -->
+  <PropertyGroup>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <ReadmeFile>README.md</ReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+  </PropertyGroup>
+
+  <!-- SourceLink -->
+  <ItemGroup> 
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+  </ItemGroup>
+
+  <!-- Package References -->
   <ItemGroup>
     <PackageReference Include="R3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)../README.md" Pack="true" PackagePath=""/>
+    <None Include="$(MSBuildThisFileDirectory)../LICENSE.txt" Pack="true" PackagePath=""/>
   </ItemGroup>
 
 </Project>
