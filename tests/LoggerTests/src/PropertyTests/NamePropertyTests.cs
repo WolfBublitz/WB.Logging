@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AwesomeAssertions;
 using WB.Logging;
 
@@ -6,13 +7,13 @@ namespace LoggerTests.PropertyTests.NamePropertyTests;
 public sealed class TheNameProperty
 {
     [Test]
-    public void ShouldReturnTheNamePassedToTheConstructor()
+    public async Task ShouldReturnTheNamePassedToTheConstructor()
     {
         // Arrange
         const string expectedName = "TestLogger";
 
         // Act
-        Logger logger = new(expectedName);
+        await using Logger logger = new(expectedName);
 
         // Assert
         logger.Name.Should().Be(expectedName);

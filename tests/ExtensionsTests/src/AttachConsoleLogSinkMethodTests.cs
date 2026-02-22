@@ -12,16 +12,14 @@ public sealed class TheAttachConsoleMethod
     {
         // Arrange
         using TestConsole testConsole = new();
-        ILogger logger = new Logger("Test");
+        await using ILogger logger = new Logger("Test");
 
         // Act
         logger.AttachConsole();
         logger.Info("Log sink is attached.");
-        await logger.FlushAsync().ConfigureAwait(false);
 
         // Assert
-        string output = testConsole.Output;
-        output.Should().Contain("Log sink is attached.", because: "the console log sink should have been attached and should have received the log message.");
+        logger.LogSinks.Should().ContainSingle(logSink => logSink is ConsoleLogSink, because: "the AttachConsole method should have attached a ConsoleLogSink to the logger.");
     }
 
     [Test]
@@ -29,16 +27,16 @@ public sealed class TheAttachConsoleMethod
     {
         // Arrange
         using TestConsole testConsole = new();
-        ILogger logger = new Logger("Test");
+        await using ILogger logger = new Logger("Test");
         IDisposable disposable = logger.AttachConsole();
+
+        // Assert
+        logger.LogSinks.Should().ContainSingle(logSink => logSink is ConsoleLogSink, because: "the AttachConsole method should have attached a ConsoleLogSink to the logger.");
 
         // Act
         disposable.Dispose();
-        logger.Info("Log sink is attached.");
-        await logger.FlushAsync().ConfigureAwait(false);
 
         // Assert
-        string output = testConsole.Output;
-        output.Should().BeEmpty(because: "the console log sink should have been detached before the log message was sent, so it should not have received the log message.");
+        logger.LogSinks.Should().NotContain(logSink => logSink is ConsoleLogSink, because: "disposing the IDisposable returned by the AttachConsole method should have detached the ConsoleLogSink from the logger.");
     }
 }

@@ -30,7 +30,7 @@ public sealed class TheTimestampFormatProperty
         };
 
         // Act
-        consoleLogSink.OnNext(new LogMessage(DateTimeOffset.MinValue, [], null, "Test message"));
+        consoleLogSink.Submit(new LogMessage(DateTimeOffset.MinValue, [], null, "Test message"));
 
         // Assert
         string consoleOutput = testConsole.Output;

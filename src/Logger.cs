@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using R3;
 
 namespace WB.Logging;
 
@@ -18,11 +19,15 @@ public sealed class Logger : ILogger
 
     private readonly CancellationTokenSource cancellationTokenSource = new();
 
-    private readonly Subject<LogMessage> logMessageSubject = new();
+    private ImmutableList<ILogSink> logSinks = [];
 
     // ┌─────────────────────────────────────────────────────────────────────────────┐
     // │ Public Properties                                                           │
     // └─────────────────────────────────────────────────────────────────────────────┘
+
+    /// <inheritdoc/>
+    public IReadOnlyList<ILogSink> LogSinks
+        => logSinks;
 
     /// <summary>
     /// Gets the name of the logger.
@@ -45,11 +50,6 @@ public sealed class Logger : ILogger
     /// If set, log messages will also be forwarded to the parent logger.
     /// </remarks>
     public ILogger? Parent { get; init; }
-
-    /// <inheritdoc/>
-    public Observable<LogMessage> LogMessages => logMessageSubject
-        .Where(logMessage => logMessage.LogLevel is null || logMessage.LogLevel >= MinimumLogLevel)
-        .AsObservable();
 
     /// <summary>
     /// Gets or sets the <see cref="ITimestampProvider"/> to use for log messages.
@@ -88,7 +88,18 @@ public sealed class Logger : ILogger
         await cancellationTokenSource.CancelAsync().ConfigureAwait(false);
         await task.ConfigureAwait(false);
         cancellationTokenSource.Dispose();
-        logMessageSubject.Dispose();
+
+        foreach (ILogSink logSink in logSinks)
+        {
+            if (logSink is IAsyncDisposable asyncDisposableLogSink)
+            {
+                await asyncDisposableLogSink.DisposeAsync().ConfigureAwait(false);
+            }
+            else if (logSink is IDisposable disposableLogSink)
+            {
+                disposableLogSink.Dispose();
+            }
+        }
     }
 
     /// <inheritdoc/>
@@ -119,6 +130,14 @@ public sealed class Logger : ILogger
         Log(null, exception);
     }
 
+    /// <inheritdoc/>
+    public IDisposable AttachLogSink(ILogSink logSink)
+    {
+        logSinks = logSinks.Add(logSink);
+
+        return new DelegateDisposable(() => logSinks = logSinks.Remove(logSink));
+    }
+
     // ┌─────────────────────────────────────────────────────────────────────────────┐
     // │ Private Methods                                                             │
     // └─────────────────────────────────────────────────────────────────────────────┘
@@ -134,7 +153,23 @@ public sealed class Logger : ILogger
                 }
                 else
                 {
-                    logMessageSubject.OnNext(logMessage);
+                    for (int i = 0; i < logSinks.Count; i++)
+                    {
+                        // The log message is only submitted to log sinks if its log level is greater than or equal to the minimum log level.
+                        if (logMessage.LogLevel is not null && logMessage.LogLevel < MinimumLogLevel)
+                        {
+                            continue;
+                        }
+
+                        try
+                        {
+                            logSinks[i].Submit(logMessage);
+                        }
+                        catch (Exception exception)
+                        {
+                            await Console.Error.WriteLineAsync($"Error submitting log message to log sink: {exception}").ConfigureAwait(false);
+                        }
+                    }
                 }
             }
         }

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AwesomeAssertions;
 using WB.Logging;
 
@@ -6,10 +7,10 @@ namespace LoggerTests.PropertyTests.ParentPropertyTests;
 public sealed class TheParentProperty
 {
     [Test]
-    public void ShouldBeNullByDefault()
+    public async Task ShouldBeNullByDefault()
     {
         // Arrange
-        Logger logger = new("TestLogger");
+        await using Logger logger = new("TestLogger");
 
         // Act
         ILogger? parent = logger.Parent;
@@ -19,11 +20,11 @@ public sealed class TheParentProperty
     }
 
     [Test]
-    public void ShouldReturnTheParentPassedToTheInitializer()
+    public async Task ShouldReturnTheParentPassedToTheInitializer()
     {
         // Arrange
         Logger parentLogger = new("ParentLogger");
-        Logger logger = new("ChildLogger")
+        await using Logger logger = new("ChildLogger")
         {
             Parent = parentLogger
         };

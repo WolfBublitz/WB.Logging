@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 
 namespace WB.Logging;
 
 /// <summary>
 /// A log sink that writes log messages to the console.
 /// </summary>
-public sealed class ConsoleLogSink : LogSinkBase
+public sealed class ConsoleLogSink : ILogSink
 {
     // ┌─────────────────────────────────────────────────────────────────────────────┐
     // │ Public Properties                                                           │
@@ -28,20 +27,46 @@ public sealed class ConsoleLogSink : LogSinkBase
     public ConsoleColor SendersColor { get; init; } = ConsoleColor.Cyan;
 
     // ┌─────────────────────────────────────────────────────────────────────────────┐
-    // │ Protected Methods                                                           │
+    // │ Public Methods                                                              │
     // └─────────────────────────────────────────────────────────────────────────────┘
 
     /// <inheritdoc/>
-    protected override void Write(LogMessage logMessage)
+    public void Submit(LogMessage logMessage)
     {
+        object? payload = logMessage.Message;
+
         Write(logMessage.Timestamp.ToString(TimestampFormat), TimestampColor);
         WriteSpace();
-        WriteInBrackets(LogLevelToString(logMessage.LogLevel), LogLevelToColor(logMessage.LogLevel));
+
+        if (payload is Exception)
+        {
+            WriteInBrackets("EXCE", ConsoleColor.White, ConsoleColor.Red);
+        }
+        else
+        {
+            WriteInBrackets(LogLevelToString(logMessage.LogLevel), LogLevelToColor(logMessage.LogLevel));
+        }
+
         WriteSpace();
         WriteInBrackets(string.Join(" ", logMessage.Senders), SendersColor);
 
+        if (payload is Exception exception)
+        {
+            WriteException(exception);
+        }
+        else
+        {
+            WritePayload(payload);
+        }
+    }
+
+    // ┌─────────────────────────────────────────────────────────────────────────────┐
+    // │ Private Methods                                                             │
+    // └─────────────────────────────────────────────────────────────────────────────┘
+    private static void WritePayload(object? payload)
+    {
         int position = WriteSpace();
-        string message = logMessage.Message?.ToString() ?? string.Empty;
+        string message = payload?.ToString() ?? string.Empty;
         string[] lines = Console.WindowWidth == 0 ? [message] : [.. message.WrapLines(Console.WindowWidth - position)];
 
         for (int i = 0; i < lines.Length - 1; i++)
@@ -54,19 +79,8 @@ public sealed class ConsoleLogSink : LogSinkBase
         WriteLine();
     }
 
-    /// <inheritdoc/>
-    protected override void Write(DateTimeOffset timestamp, IReadOnlyList<string> senders, Exception exception)
+    private static void WriteException(Exception exception)
     {
-        DateTimeOffset timeOffset = exception.Data.Contains("Timestamp") && exception.Data["Timestamp"] is DateTimeOffset dto
-            ? dto
-            : DateTimeOffset.Now;
-
-        Write(timeOffset.ToString(TimestampFormat), TimestampColor);
-        WriteSpace();
-        WriteInBrackets("EXCE", ConsoleColor.White, ConsoleColor.Red);
-        WriteSpace();
-        WriteInBrackets(string.Join(" ", senders), SendersColor);
-
         int position = WriteSpace();
 
         if (exception.StackTrace is not null)
@@ -87,9 +101,6 @@ public sealed class ConsoleLogSink : LogSinkBase
         WriteLine();
     }
 
-    // ┌─────────────────────────────────────────────────────────────────────────────┐
-    // │ Private Methods                                                             │
-    // └─────────────────────────────────────────────────────────────────────────────┘
     private static int WriteSpace()
     {
         Console.Write(" ");

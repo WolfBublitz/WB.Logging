@@ -1,11 +1,9 @@
 ﻿using System;
 using WB.Logging;
 
-ConsoleLogSink consoleLogSink = new();
-
 await using ILogger logger = new Logger("SimpleLogger");
 
-logger.LogMessages.Subscribe(consoleLogSink);
+logger.AttachConsole();
 
 logger.Info("This is an info message.");
 logger.Warning("This is a warning message.");

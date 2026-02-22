@@ -15,7 +15,7 @@ public sealed class TheConsoleLogSink
         ConsoleLogSink consoleLogSink = new();
 
         // Act
-        consoleLogSink.OnNext(new LogMessage(DateTimeOffset.MinValue, [], null, "Hello, console!"));
+        consoleLogSink.Submit(new LogMessage(DateTimeOffset.MinValue, [], null, "Hello, console!"));
 
         // Assert
         string consoleOutput = testConsole.Output;
@@ -33,7 +33,7 @@ public sealed class TheConsoleLogSink
         ConsoleLogSink consoleLogSink = new();
 
         // Act
-        consoleLogSink.OnNext(new LogMessage(DateTimeOffset.MinValue, [], logLevel, "Hello, console!"));
+        consoleLogSink.Submit(new LogMessage(DateTimeOffset.MinValue, [], logLevel, "Hello, console!"));
 
         // Assert
         string consoleOutput = testConsole.Output;

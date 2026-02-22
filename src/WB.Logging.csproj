@@ -11,7 +11,7 @@
        │ Version                                                              │
        ╰──────────────────────────────────────────────────────────────────────╯ -->
   <PropertyGroup>
-    <Version>1.0.0-preview.2</Version>
+    <Version>1.0.0-preview.3</Version>
   </PropertyGroup>
 
   <!-- ╭──────────────────────────────────────────────────────────────────────╮
@@ -61,7 +61,7 @@
        │ README                                                               │
        ╰──────────────────────────────────────────────────────────────────────╯ -->
   <PropertyGroup>
-    <ReadmeFile>README.md</ReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -90,7 +90,6 @@
        │ Package References                                                   │
        ╰──────────────────────────────────────────────────────────────────────╯ -->
   <ItemGroup>
-    <PackageReference Include="R3" />
   </ItemGroup>
 
 </Project>

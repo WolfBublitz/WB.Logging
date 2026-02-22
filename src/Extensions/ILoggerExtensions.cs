@@ -1,5 +1,4 @@
 using System;
-using R3;
 
 namespace WB.Logging;
 
@@ -19,10 +18,6 @@ public static class ILoggerExtensions
 
         ConsoleLogSink consoleLogSink = new();
 
-        IDisposable subscription = @this.LogMessages.Subscribe(consoleLogSink);
-
-        CompositeDisposable disposables = new(consoleLogSink, subscription);
-
-        return disposables;
+        return @this.AttachLogSink(consoleLogSink);
     }
 }

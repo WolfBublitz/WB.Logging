@@ -2,9 +2,16 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AwesomeAssertions;
 using WB.Logging;
-using R3;
 
 namespace LoggerTests.PropertyTests.LogMessagesPropertyTests;
+
+internal sealed class TestLogSink : ILogSink
+{
+    public readonly List<LogMessage> LogMessage = [];
+
+    public void Submit(LogMessage logMessage)
+        => LogMessage.Add(logMessage);
+}
 
 public sealed class TheLogMessagesProperty
 {
@@ -12,15 +19,15 @@ public sealed class TheLogMessagesProperty
     public async Task ShouldPublishLogMessagesWrittenToTheLogger()
     {
         // Arrange
-        List<LogMessage> logMessages = [];
-        Logger logger = new("TestLogger");
-        logger.LogMessages.Subscribe(logMessages.Add);
+        TestLogSink testLogSink = new();
+        await using Logger logger = new("TestLogger");
+        logger.AttachLogSink(testLogSink);
 
         // Act
         logger.Log(LogLevel.Info, "Hello, world.");
         await logger.FlushAsync().ConfigureAwait(false);
 
         // Assert
-        logMessages.Should().ContainSingle(logMessage => logMessage.Message.ToString() == "Hello, world.");
+        testLogSink.LogMessage.Should().ContainSingle(logMessage => logMessage.Message.ToString() == "Hello, world.");
     }
 }

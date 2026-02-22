@@ -2,9 +2,16 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AwesomeAssertions;
 using WB.Logging;
-using R3;
 
 namespace LoggerTests.PropertyTests.MinimumLogLevelPropertyTests;
+
+internal sealed class TestLogSink : ILogSink
+{
+    public readonly List<LogMessage> LogMessage = [];
+
+    public void Submit(LogMessage logMessage)
+        => LogMessage.Add(logMessage);
+}
 
 public sealed class TheMinimumLogLevelProperty
 {
@@ -18,22 +25,22 @@ public sealed class TheMinimumLogLevelProperty
         LogLevel minimumLogLevel = logger.MinimumLogLevel;
 
         // Assert
-        minimumLogLevel.Should().Be(LogLevel.Info);
+        minimumLogLevel.Should().Be(LogLevel.Info, because: "the default minimum log level should be LogLevel.Info.");
     }
 
     [Test]
-    [Arguments(LogLevel.Info)]
-    [Arguments(LogLevel.Warning)]
-    [Arguments(LogLevel.Error)]
-    public async Task ShouldFilterLogsBelowTheMinimumLogLevel(LogLevel minimumLogLevel)
+    [Arguments(LogLevel.Info, 3)]
+    [Arguments(LogLevel.Warning, 2)]
+    [Arguments(LogLevel.Error, 1)]
+    public async Task ShouldFilterLogsBelowTheMinimumLogLevel(LogLevel minimumLogLevel, int expectedLogCount)
     {
         // Arrange
-        List<LogMessage> logMessages = [];
-        Logger logger = new("TestLogger")
+        TestLogSink testLogSink = new();
+        await using Logger logger = new("TestLogger")
         {
             MinimumLogLevel = minimumLogLevel
         };
-        logger.LogMessages.Subscribe(logMessages.Add);
+        logger.AttachLogSink(testLogSink);
 
         // Act
         logger.Log(LogLevel.Info, "This is an info message.");
@@ -42,6 +49,7 @@ public sealed class TheMinimumLogLevelProperty
         await logger.FlushAsync().ConfigureAwait(false);
 
         // Assert
-        logMessages.Should().OnlyContain(logMessage => logMessage.LogLevel >= minimumLogLevel);
+        testLogSink.LogMessage.Should().HaveCount(expectedLogCount, because: "only messages with a LogLevel greater than or equal to the MinimumLogLevel should be logged.");
+        testLogSink.LogMessage.Should().OnlyContain(logMessage => logMessage.LogLevel >= minimumLogLevel, because: "only messages with a LogLevel greater than or equal to the MinimumLogLevel should be logged.");
     }
 }
