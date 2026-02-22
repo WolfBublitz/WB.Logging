@@ -8,7 +8,7 @@ An easy-to-use non-blocking logging library for .NET applications, designed to p
 - **Multiple Sinks**: Supports multiple output targets (sinks) such as console, file, and more.
 - **Configurable**: Easily configure log levels, formats, and sinks to suit your needs.
 - **Extensible**: Create custom sinks and loggers to fit your specific requirements.
-- **Log anything**: Log messages of any type, including complex objects, with automatic serialization.
+- **Log anything**: Log messages of any type, including complex objects.
 
 ## 🚀 Example
 
