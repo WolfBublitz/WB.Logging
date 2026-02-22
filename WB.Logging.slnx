@@ -12,6 +12,10 @@
   <Folder Name="/tests/ConsoleLogSinkTests/src/">
     <Project Path="tests/ConsoleLogSinkTests/src/ConsoleLogSinkTests.csproj" />
   </Folder>
+  <Folder Name="/tests/ExtensionsTests/" />
+  <Folder Name="/tests/ExtensionsTests/src/">
+    <Project Path="tests/ExtensionsTests/src/ExtensionsTests.csproj" />
+  </Folder>
   <Folder Name="/tests/LoggerTests/" />
   <Folder Name="/tests/LoggerTests/src/">
     <Project Path="tests/LoggerTests/src/LoggerTests.csproj" />

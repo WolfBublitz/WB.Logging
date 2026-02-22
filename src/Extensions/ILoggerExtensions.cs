@@ -1,0 +1,28 @@
+using System;
+using R3;
+
+namespace WB.Logging;
+
+/// <summary>
+/// Provides extension methods for <see cref="ILogger"/> to simplify common logging tasks.
+/// </summary>
+public static class ILoggerExtensions
+{
+    /// <summary>
+    /// Attaches a <see cref="ConsoleLogSink"/> to <paramref name="this"/> <see cref="ILogger"/>.
+    /// </summary>
+    /// <param name="this">The logger to attach the console sink to.</param>
+    /// <returns>An <see cref="IDisposable"/> that can be used to detach the console sink.</returns>
+    public static IDisposable AttachConsole(this ILogger @this)
+    {
+        ArgumentNullException.ThrowIfNull(@this, nameof(@this));
+
+        ConsoleLogSink consoleLogSink = new();
+
+        IDisposable subscription = @this.LogMessages.Subscribe(consoleLogSink);
+
+        CompositeDisposable disposables = new(consoleLogSink, subscription);
+
+        return disposables;
+    }
+}
