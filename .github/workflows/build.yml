@@ -32,7 +32,7 @@ jobs:
       pull-requests: write
     strategy:
       matrix:
-        test: [ConsoleLogSinkTests, LoggerTests]
+        test: [ConsoleLogSinkTests, ExtensionsTests, LoggerTests]
     
     steps:
     - uses: actions/checkout@v4
