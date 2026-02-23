@@ -7,6 +7,10 @@ namespace WB.Logging;
 /// </summary>
 public static class ILoggerExtensions
 {
+    // ┌─────────────────────────────────────────────────────────────────────────────┐
+    // │ Public Methods                                                              │
+    // └─────────────────────────────────────────────────────────────────────────────┘
+
     /// <summary>
     /// Attaches a <see cref="ConsoleLogSink"/> to <paramref name="this"/> <see cref="ILogger"/>.
     /// </summary>

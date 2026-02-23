@@ -5,9 +5,15 @@ namespace WB.Logging;
 
 internal static class StringExtensions
 {
+    // ┌─────────────────────────────────────────────────────────────────────────────┐
+    // │ Private Fields                                                              │
+    // └─────────────────────────────────────────────────────────────────────────────┘
     private const string Space = " ";
 
-    public static IEnumerable<string> WrapLines(this string @this, int width)
+    // ┌─────────────────────────────────────────────────────────────────────────────┐
+    // │ Internal Methods                                                            │
+    // └─────────────────────────────────────────────────────────────────────────────┘
+    internal static IEnumerable<string> WrapLines(this string @this, int width)
     {
         if (string.IsNullOrEmpty(@this) || width < 1)
         {

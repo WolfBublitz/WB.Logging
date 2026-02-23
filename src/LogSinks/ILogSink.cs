@@ -5,6 +5,10 @@ namespace WB.Logging;
 /// </summary>
 public interface ILogSink
 {
+    // ┌─────────────────────────────────────────────────────────────────────────────┐
+    // │ Public Methods                                                              │
+    // └─────────────────────────────────────────────────────────────────────────────┘
+
     /// <summary>
     /// Submits a <see cref="LogMessage"/> to this log sink for processing.
     /// </summary>
