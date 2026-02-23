@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace WB.Logging;
 
+/// <summary>
+/// Provides extension methods for strings.
+/// </summary>
 internal static class StringExtensions
 {
     // ┌─────────────────────────────────────────────────────────────────────────────┐
