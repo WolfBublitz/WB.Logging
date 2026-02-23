@@ -48,6 +48,13 @@
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="WB.CodeAnalyzer">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
   <!-- ╭──────────────────────────────────────────────────────────────────────╮
        │ Documentation                                                        │
        ╰──────────────────────────────────────────────────────────────────────╯ -->
