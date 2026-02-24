@@ -166,6 +166,7 @@ jobs:
         uses: CSchoel/release-notes-from-changelog@v1
         with:
           begin-pattern: '/^## ${RELEASE_VERSION}/'
+          link-pattern: '/^## ${RELEASE_VERSION}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
