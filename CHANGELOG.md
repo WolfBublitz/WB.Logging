@@ -1,6 +1,6 @@
 # WB.Logging
 
-## 1.0.0 - Initial Release
+## 1.0.0 - 2026-02-24
 
 ### ✨ Features
 
