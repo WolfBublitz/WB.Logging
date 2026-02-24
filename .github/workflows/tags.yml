@@ -103,7 +103,7 @@ jobs:
         files: |
           tests/${{ matrix.test }}/src/**/*.trx
 
-  publish_nuget:
+  publish-nuget:
     runs-on: ubuntu-latest
     needs: test
 
