@@ -11,7 +11,7 @@
        │ Version                                                              │
        ╰──────────────────────────────────────────────────────────────────────╯ -->
   <PropertyGroup>
-    <Version>1.0.0</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <!-- ╭──────────────────────────────────────────────────────────────────────╮
@@ -96,7 +96,15 @@
   <!-- ╭──────────────────────────────────────────────────────────────────────╮
        │ Package References                                                   │
        ╰──────────────────────────────────────────────────────────────────────╯ -->
-  <ItemGroup>
+  <ItemGroup Condition="'$(SourceBuild)' != 'true'">
+    <ProjectReference Include="WB.Logging.Base" Version="[1, 2)" />
+  </ItemGroup>
+
+  <!-- ╭──────────────────────────────────────────────────────────────────────╮
+       │ Project References                                                   │
+       ╰──────────────────────────────────────────────────────────────────────╯ -->
+  <ItemGroup Condition="'$(SourceBuild)' == 'true'">
+    <ProjectReference Include="$(DependencyDir)WB.Logging.Base/src/WB.Logging.Base.csproj" />
   </ItemGroup>
 
 </Project>
