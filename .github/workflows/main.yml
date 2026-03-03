@@ -9,6 +9,10 @@ permissions:
   pull-requests: write
 
 jobs:
+  validate-version:
+    uses: ./.github/workflows/validate-version-job.yml
+    if: startsWith(github.ref, 'refs/tags/')
+
   build:
     uses: ./.github/workflows/build.yml
     with:
@@ -20,3 +24,10 @@ jobs:
     with:
       dotnet-version: '10.0.x'
       tests: '["LoggerTests"]'
+  
+  publish-nuget:
+    uses: ./.github/workflows/publish-nuget-job.yml
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/')
+    with:
+      dotnet-version: '10.0.x'
