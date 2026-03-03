@@ -1,6 +1,5 @@
 <Project>
     <PropertyGroup>
         <DependencyDir>$(MSBuildThisFileDirectory)deps/</DependencyDir>
-        <SourceBuild>true</SourceBuild>
     </PropertyGroup>
 </Project>
