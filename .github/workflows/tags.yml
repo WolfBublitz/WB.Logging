@@ -52,6 +52,8 @@ jobs:
   build:
     needs: validate-version
     uses: ./.github/workflows/build.yml
+    with:
+      dotnet-version: '10.0.x'
 
   test:
     needs: build
