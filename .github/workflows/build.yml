@@ -21,4 +21,4 @@ jobs:
 
     - name: Build
       working-directory: src
-      run: $GITHUB_WORKSPACE/scripts/build-nuget.sh
+      run: $GITHUB_WORKSPACE/.github/workflows/scripts/build-nuget.cs
