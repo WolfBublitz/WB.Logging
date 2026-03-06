@@ -21,4 +21,6 @@ jobs:
 
     - name: Build
       working-directory: src
-      run: $GITHUB_WORKSPACE/.github/workflows/scripts/build-nuget.cs
+      run: |
+        chmod +x $GITHUB_WORKSPACE/.github/workflows/scripts/build-nuget.cs
+        dotnet run $GITHUB_WORKSPACE/.github/workflows/scripts/build-nuget.cs
